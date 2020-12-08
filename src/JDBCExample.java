@@ -1,4 +1,9 @@
 import java.sql.*;
+import java.util.List;
+
+import com.bit.utils.emaillist.dao.EmaillistDao;
+import com.bit.utils.emaillist.dao.EmaillistDaoOrcl;
+import com.bit.utils.emaillist.vo.EmaillistVo;
 
 // JDBC 를 이용한 데이터베이스 접속 코드
 
@@ -8,8 +13,50 @@ public class JDBCExample {
 	private static String dbpass = "webdb";
 	
 	public static void main(String[] args) {
-		connectionTest();
-		selectTest();
+//		connectionTest();
+//		selectTest();
+//		daoSelectTest();
+//		daoInsertTest("홍", "길동", "hong@naver.com");
+//		daoInsertTest("고", "길동", "gogiree@google.com");
+		daoDeleteTest(6L);
+		daoSelectTest();
+	}
+	
+	// DAO DELETE
+	private static void daoDeleteTest(Long no) {
+		EmaillistDao dao = new EmaillistDaoOrcl();
+		int deletedCount = dao.delete(no);
+		
+		System.out.printf("%d개의 레코드가 삭제되었습니다", deletedCount);
+	}
+	
+	// DAO INSERT
+	private static void daoInsertTest(String lastName,
+									String firstName,
+									String email) {
+		EmaillistDao dao = new EmaillistDaoOrcl();
+		// 저장을 위한 객체 생성
+		EmaillistVo vo = new EmaillistVo();
+		vo.setLastName(lastName);
+		vo.setFirstName(firstName);
+		vo.setEmail(email);
+		
+		int insertedCount = dao.insert(vo);
+		
+		System.out.printf("%d개의 레코드가 삽입되었습니다.%n", insertedCount);
+	}
+	
+	// DAO Select
+	private static void daoSelectTest() {
+		// emaillist 테이블로부터 목록을 출력
+		EmaillistDao dao = new EmaillistDaoOrcl();
+		// 목록 저장을 위한 리스트 생성
+		List<EmaillistVo> list = dao.getList();
+		
+		// 출력
+		for (EmaillistVo vo: list) {
+			System.out.println(vo);
+		}
 	}
 	
 	// SELECT
